@@ -1,6 +1,6 @@
 <?php
   $host = 'localhost';
-  $dbname = 'georescue';
+  $dbname = '115696';
   $username = 'root';
   $password = '';
     
