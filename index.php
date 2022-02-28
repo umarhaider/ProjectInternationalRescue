@@ -3,7 +3,7 @@
 <head>
   <title>Geo Rescue</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <!-- Bootstrap -->
@@ -26,7 +26,6 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" ></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Leafly-->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -36,6 +35,10 @@
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin="">
   </script>
+   <!-- Font Awesome -->
+  <link href="assets/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+  <link href="assets/vendor/fontawesome/css/solid.min.css" rel="stylesheet">
+  <link href="assets/vendor/fontawesome/css/brands.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -103,15 +106,15 @@
 
 ?>
 <div id="map"></div>
-
+<div id="location"></div>
+<button onclick="getLocation()">Current Location</button>
 
 <!-- MAIN CONTENT - TABLE -->
-<div class="container">
+<div class="container ">
   <div class="row">
     <div class="col">
       <h2 style="text-align: center; margin-top: 20px;">Pinpoints</h2>
-      <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-      <div class="table-responsive">
+      <table id="dtBasicExample" width="100%" class="table table-hover" cellspacing="0" >
         <thead>
           <tr>
             <th class="th-sm">Longitude
@@ -138,16 +141,24 @@
            <td><?php echo htmlspecialchars($row['latitude']); ?></td>
            <td><?php echo htmlspecialchars($row['details']); ?></td>
            <td><?php echo htmlspecialchars($row['name']); ?></td>
-           <td><?php echo htmlspecialchars($row['priority']); ?></td>
+           <td> <?php if ($row['priority'] == 'low') {
+              echo '<span class="low">' . htmlspecialchars($row['priority']) . '<span>'; 
+            } else if ($row['priority'] == 'medium') {
+              echo '<span class="medium">' . htmlspecialchars($row['priority']) . '<span>'; 
+            } else {
+              echo '<span class="high">' . htmlspecialchars($row['priority']) . '<span>'; 
+            } ?>
+            </td>
            <td><?php echo htmlspecialchars($row['status']); ?></td>
            <td><a href="action.php?action=updateStatus&item=<?php echo htmlspecialchars($row['id']); ?>">
             <button class="btn btn-success" <?php if($row['status'] == 'Complete'){ echo 'disabled'; } ?> >Complete</button></a><br><br>
-            <a href="action.php?action=deleteItem&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-danger"><i class="fa-trash-can"></i>Delete</button></a>
+            <a href="action.php?action=deleteItem&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-danger"><i class="fa-trash-can"></i>Delete</button><i class="fa-solid fa-trash-can"></i></a>
 
-            <a onclick="showMarker(<?php echo htmlspecialchars($row['latitude']);?>, <?php echo htmlspecialchars($row['longitude']);?>)" class="btn btn-secondary"><i class="icon-trash"></i>View</a>
+            <a onclick="showMarker(<?php echo htmlspecialchars($row['latitude']);?>, <?php echo htmlspecialchars($row['longitude']);?>)" class="btn btn-secondary"></i>View</a> 
+
         </tr>
         <?php endwhile; ?>
-       </tbody>
+        </tbody>
         </div>
       </table>
     </div>
@@ -186,6 +197,29 @@
   </div>
 
 
+<script type="text/javascript">
+  var x = document.getElementById("location");
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+
+  function showPosition(position) {
+    map.setView([position.coords.latitude, position.coords.longitude], 16)
+    var popup = L.popup()
+    .setLatLng([position.coords.latitude, position.coords.longitude])
+    .setContent("You are here")
+    .openOn(map);
+    var outputValueLat = position.coords.latitude;
+    document.getElementById("lat").value = outputValueLat;
+    var outputValueLong = position.coords.longitude;
+    document.getElementById("long").value = outputValueLong;
+    
+  }
+</script>
 
 
 <!-- Enables datatable -->
@@ -194,8 +228,6 @@ $(document).ready(function () {
   $('#dtBasicExample').DataTable();
   $('.dataTables_length').addClass('bs-select');
 });
-
-
 
 </script>
 
@@ -207,10 +239,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-
-var completeIcon = L.icon({
-  markerColor: 'green'
-});
 
 </script>
 
@@ -230,7 +258,6 @@ var completeIcon = L.icon({
 <script type="text/javascript">
 
 function showMarker(lat, long) {
-  console.log(lat, long);
   map.setView([lat, long], 16);
 }
 
@@ -238,7 +265,7 @@ function showMarker(lat, long) {
 function onMapClick(e) {
     popup
         .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
+        .setContent("At " + e.latlng.toString())
         .openOn(map);
 }
 
