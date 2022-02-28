@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" ></script>
 
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Leafly-->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -45,7 +45,7 @@
 <div class="navigationbar">
 <nav class="navbar navbar-expand-lg navbar navbar-custom">
   <img src="geoRescue.jpg" class="rounded float-left img" alt="Logo">
-  <p class="mb-0">Geo Rescue</p>
+  <p style="margin-left: 5px;"class="mb-0">Geo Rescue</p>
 </nav>
 </div>
 
@@ -61,6 +61,7 @@
   try{
    $pdo = new PDO($dsn, $username, $password);
    $stmt = $pdo->query($sql);
+   $stmt2 = $pdo->query($sql);
    if($stmt === false){
     die("Error");
    }
@@ -86,6 +87,21 @@
   }
 
 ?>
+
+
+<?php
+  // if signup process fails, output error message
+  if (isset($_SESSION['successMessage'])) {
+  //echo $_SESSION['login_error_msg'];
+  echo "<div id='successtext' class='alert alert-success alert-dismissible fade show' role='alert'>";
+  echo "<strong>Success! </strong>";
+  echo $_SESSION['successMessage'];
+  unset($_SESSION['successMessage']);
+  echo  "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+  echo "<span aria-hidden='true'>&times;</span></div>";
+  }
+
+?>
 <div id="map"></div>
 
 
@@ -94,15 +110,15 @@
   <div class="row">
     <div class="col">
       <h2 style="text-align: center; margin-top: 20px;">Pinpoints</h2>
-      <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0">
+      <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+      <div class="table-responsive">
         <thead>
           <tr>
             <th class="th-sm">Longitude
             </th>
-
             <th class="th-sm">Latitude
             </th>
-            <th class="th-sm">Text
+            <th class="th-sm">Details
             </th>
             <th class="th-sm">Person
             </th>
@@ -116,18 +132,23 @@
           </tr>
         </thead>
         <tbody>
-        <?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
+        <?php while($row = $stmt2->fetch(PDO::FETCH_ASSOC)) : ?>
         <tr>
            <td><?php echo htmlspecialchars($row['longitude']); ?></td>
            <td><?php echo htmlspecialchars($row['latitude']); ?></td>
-           <td><?php echo htmlspecialchars($row['text']); ?></td>
+           <td><?php echo htmlspecialchars($row['details']); ?></td>
            <td><?php echo htmlspecialchars($row['name']); ?></td>
            <td><?php echo htmlspecialchars($row['priority']); ?></td>
            <td><?php echo htmlspecialchars($row['status']); ?></td>
-           <td><a href="action.php?action=updateStatus&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-success" <?php if($row['status'] == 'Complete'){ echo 'disabled'; } ?> >Complete</button></a><br><br><a href="action.php?action=deleteItem&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-danger">Delete</button></a></td>
+           <td><a href="action.php?action=updateStatus&item=<?php echo htmlspecialchars($row['id']); ?>">
+            <button class="btn btn-success" <?php if($row['status'] == 'Complete'){ echo 'disabled'; } ?> >Complete</button></a><br><br>
+            <a href="action.php?action=deleteItem&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-danger"><i class="fa-trash-can"></i>Delete</button></a>
+
+            <a onclick="showMarker(<?php echo htmlspecialchars($row['latitude']);?>, <?php echo htmlspecialchars($row['longitude']);?>)" class="btn btn-secondary"><i class="icon-trash"></i>View</a>
         </tr>
         <?php endwhile; ?>
        </tbody>
+        </div>
       </table>
     </div>
     <div class="col form" style="margin-top: 25px;">
@@ -147,20 +168,19 @@
             <input type="text" name="name" class="form-control mb-4" placeholder="Name" id="name" required maxlength="40">
 
             <!-- Description -->
-            <input type="text" name="details" class="form-control mb-4" placeholder="Details" id="details" required>
+            <input type="text" name="details" class="form-control mb-4" placeholder="Details" id="details" maxlength="100" required>
 
             <!-- Priority -->
             <select class="form-control mb-4" name="priority" id="priority">
-            <option value="1">Low</option>
-            <option value="2">Medium</option>
-            <option value="3">High</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
             </select>
 
             <!-- Submit button -->
             <button class="btn btn-info btn-block my-4" style="background-color: #4723D9;"type="submit">Submit</button>
 
         </form>
-        <!--form login -->
     </div>
 
   </div>
@@ -174,23 +194,46 @@ $(document).ready(function () {
   $('#dtBasicExample').DataTable();
   $('.dataTables_length').addClass('bs-select');
 });
+
+
+
 </script>
 
 
 <script type="text/javascript">
-var map = L.map('map').setView([51.505, -0.09], 13);
+var map = L.map('map').setView([51.505, -0.09], 6);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-/*
-L.marker([51.5, -0.09]).addTo(map)
-    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-    .openPopup();
 
-*/
-var popup = L.popup();
+var completeIcon = L.icon({
+  markerColor: 'green'
+});
+
+</script>
+
+<?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
+  <script type="text/javascript">
+  var lat = "<?php echo htmlspecialchars($row['latitude']); ?>";
+  var long = "<?php echo htmlspecialchars($row['longitude']); ?>";
+  var text = "<?php echo htmlspecialchars($row['details']); ?>";
+    L.marker([lat, long]).addTo(map)
+      .bindPopup(text)
+      .openPopup();
+  var popup = L.popup();
+  </script>
+<?php endwhile; ?>
+
+
+<script type="text/javascript">
+
+function showMarker(lat, long) {
+  console.log(lat, long);
+  map.setView([lat, long], 16);
+}
+
 
 function onMapClick(e) {
     popup
