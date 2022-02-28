@@ -41,38 +41,16 @@
 </head>
 <body>
 
-
 <!-- NAVIGATION BAR -->
 <div class="navigationbar">
 <nav class="navbar navbar-expand-lg navbar navbar-custom">
-  <img src="finance-logo.png" class="rounded float-left img" alt="Logo">
-  <blockquote class="blockquote text-center navbar-brand">
+  <img src="geoRescue.jpg" class="rounded float-left img" alt="Logo">
   <p class="mb-0">Geo Rescue</p>
-  <footer class="blockquote-footer"><cite title="Source Title"></cite></footer>
-  </blockquote>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-      </li>
-      <li class="nav-item">
-      </li>
-    </ul>
-    <span class="navbar-text">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="privacypolicy.html">About</a>
-      </li>
-    </ul>
-    </span>
-  </div>
 </nav>
 </div>
 
 <?php
+  session_start();
   // Server login details
   include 'conn.php';
   // SQL Get all users
@@ -92,6 +70,22 @@
   }
 ?>
 
+
+
+<!-- Error Alerts -->
+<?php
+  // if signup process fails, output error message
+  if (isset($_SESSION['errorMessage'])) {
+  //echo $_SESSION['login_error_msg'];
+  echo "<div id='errortext' class='alert alert-danger alert-dismissible fade show' role='alert'>";
+  echo "<strong>Error! </strong>";
+  echo $_SESSION['errorMessage'];
+  unset($_SESSION['errorMessage']);
+  echo  "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+  echo "<span aria-hidden='true'>&times;</span></div>";
+  }
+
+?>
 <div id="map"></div>
 
 
@@ -99,63 +93,68 @@
 <div class="container">
   <div class="row">
     <div class="col">
-    <h2 style="text-align: center; margin-top: 20px;">Pinpoints</h2>
-    <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-      <thead>
-        <tr>
-          <th class="th-sm">Longitude
-          </th>
+      <h2 style="text-align: center; margin-top: 20px;">Pinpoints</h2>
+      <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0">
+        <thead>
+          <tr>
+            <th class="th-sm">Longitude
+            </th>
 
-          <th class="th-sm">Latitude
-          </th>
-          <th class="th-sm">Text
-          </th>
-          <th class="th-sm">Person
-          </th>
-          </th>
-          <th class="th-sm">Priority
-          </th>
-          <th class="th-sm">Status
-          </th>
-          <th class="th-sm">Action
-          </th>
+            <th class="th-sm">Latitude
+            </th>
+            <th class="th-sm">Text
+            </th>
+            <th class="th-sm">Person
+            </th>
+            </th>
+            <th class="th-sm">Priority
+            </th>
+            <th class="th-sm">Status
+            </th>
+            <th class="th-sm">Action
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
+        <tr>
+           <td><?php echo htmlspecialchars($row['longitude']); ?></td>
+           <td><?php echo htmlspecialchars($row['latitude']); ?></td>
+           <td><?php echo htmlspecialchars($row['text']); ?></td>
+           <td><?php echo htmlspecialchars($row['name']); ?></td>
+           <td><?php echo htmlspecialchars($row['priority']); ?></td>
+           <td><?php echo htmlspecialchars($row['status']); ?></td>
+           <td><a href="action.php?action=updateStatus&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-success" <?php if($row['status'] == 'Complete'){ echo 'disabled'; } ?> >Complete</button></a><br><br><a href="action.php?action=deleteItem&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-danger">Delete</button></a></td>
         </tr>
-      </thead>
-      <tbody>
-      <?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
-      <tr>
-         <td><?php echo htmlspecialchars($row['longitude']); ?></td>
-         <td><?php echo htmlspecialchars($row['latitude']); ?></td>
-         <td><?php echo htmlspecialchars($row['text']); ?></td>
-         <td><?php echo htmlspecialchars($row['name']); ?></td>
-         <td><?php echo htmlspecialchars($row['priority']); ?></td>
-         <td><?php echo htmlspecialchars($row['status']); ?></td>
-         <td><a href="action.php?action=updateStatus&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-success" <?php if($row['status'] == 'Complete'){ echo 'disabled'; } ?> >Complete</button></a><br><br><a href="action.php?action=deleteItem&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-danger">Delete</button></a></td>
-      </tr>
-      <?php endwhile; ?>
-     </tbody>
-    </table>
-      <div class="text-center"  style="margin-top: 25px;">
-      <a href="adduser.html"><button type="button"class="btn btn-secondary">View on map</button></a>
-      <a href="adduser.html"><button type="button"class="btn btn-secondary">Mark as complete</button></a>
-      <a href="adduser.html"><button type="button"class="btn btn-secondary">Delete</button></a>
-      </div>
+        <?php endwhile; ?>
+       </tbody>
+      </table>
     </div>
     <div class="col form" style="margin-top: 25px;">
         <!-- form login -->
-        <form class="" method="post" action="login-auth.php">
+        <form class="" method="post" action="form-action.php">
             <!-- Send Screen Details -->
             <span class="h4 mb-4 today" title="Today"></span>
-            <p class="h4 mb-4">Enter Pinpoint details </i></p>
+            <p class="h4 mb-4">Enter Pinpoint details - click on map to select area </i></p>
 
-            <!-- Location -->
-            <input type="text" name="location" value="" class="form-control mb-4" placeholder="Location" id="location" required >
+            <!-- Location Latitude-->
+            <input type="text" name="lat" value="" class="form-control mb-4" placeholder="Latitude" id="lat" required>
+
+            <!-- Location Longitude -->
+            <input type="text" name="long" value="" class="form-control mb-4" placeholder="Longitude" id="long" required>
 
             <!-- name -->
             <input type="text" name="name" class="form-control mb-4" placeholder="Name" id="name" required maxlength="40">
 
             <!-- Description -->
-            <input type="text" name="details" class="form-control mb-4" placeholder="Details" id="name" required>
+            <input type="text" name="details" class="form-control mb-4" placeholder="Details" id="details" required>
+
+            <!-- Priority -->
+            <select class="form-control mb-4" name="priority" id="priority">
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+            </select>
 
             <!-- Submit button -->
             <button class="btn btn-info btn-block my-4" style="background-color: #4723D9;"type="submit">Submit</button>
@@ -185,11 +184,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+/*
 L.marker([51.5, -0.09]).addTo(map)
     .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
     .openPopup();
 
-
+*/
 var popup = L.popup();
 
 function onMapClick(e) {
@@ -200,8 +200,10 @@ function onMapClick(e) {
 }
 
 function populateForm(e) {
-    var outputValue = e.latlng.toString();
-    document.getElementById("location").value = outputValue;
+    var outputValueLat = e.latlng.lat;
+    document.getElementById("lat").value = outputValueLat;
+    var outputValueLong = e.latlng.lng;
+    document.getElementById("long").value = outputValueLong;
 }
 
 map.on('click', onMapClick);
