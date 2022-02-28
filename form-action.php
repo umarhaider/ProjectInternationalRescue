@@ -37,6 +37,8 @@ $long     = checkData($_POST["long"]);
    // when successful redirects user to success message
    function processData($name, $details, $priority, $lat, $long) {
       include 'conn.php';
+
+      //if $priority == '1'
       try{
          $sql = "INSERT INTO georescue (name, details, priority, latitude, longitude, status) VALUES (:name, :details, :priority, :lat, :long, :status)";
          // Prepare statement.
@@ -52,6 +54,7 @@ $long     = checkData($_POST["long"]);
          $statement->bindValue(':status', 'incomplete');
          // Execute the statement and insertvalues.
          $inserted = $statement->execute();
+         $_SESSION['successMessage'] = 'New Pinpoint Added!';
          header('location: index.php');
       // Catch errors
       } catch (PDOException $e) {

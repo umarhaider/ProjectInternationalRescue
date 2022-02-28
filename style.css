@@ -1,24 +1,112 @@
-.box-shadow {
--webkit-box-shadow: 0px 10px 20px 0px rgba(50, 50, 50, 0.52);
--moz-box-shadow:    0px 10px 20px 0px rgba(50, 50, 50, 0.52);
-box-shadow:         0px 10px 20px 0px rgba(50, 50, 50, 0.52);
+
+#map { 
+  height: 75vh; 
 }
 
-.today {
-    text-align: right;
-    color: grey;
-    font-size: 20px;
+.low {
+  color: darkkhaki;
+  font-weight: bold;
 }
 
-.container {
-    margin-top: 100px;
-    border-radius:.25rem!important;
+.medium {
+  color: orange;
+  font-weight: bold;
 }
 
-body {
-    background-color: white;
+
+.high {
+  color: red;
+  font-weight: bold;
 }
 
-#footer {
+.textarea {
+  max-height: 15vh;
+}
+
+.jumbotron {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.navigationbar
+{
+  font-family: 'Lato', sans-serif;
+  color:grey;
+  margin: 0px;
+}
+
+#resetbtn {
+  float: right;
+}
+
+
+.alert-text {
+  position: fixed;
+  top: 1vh;
+  margin-left: 80%;
+  width: 20%;
+  transition: height .2s;
+}
+
+.navbar-brand
+{
+  font-family: 'Lato', sans-serif;
+  color:red;
+  font-size: 30px;
+  margin: 0px;
+}
+
+.jumbotron{
+color: white;
+background-color:#033076; !important;*/
+}
+
+.col-6 {
+   padding: 25px;
+}
+
+.col-8 {
+  padding-left: 0px;
+}
+
+#banner a {
+  text-decoration: none;
+  color: white;
+}
+
+#banner a:hover{
+  text-decoration: none;
+  color: white;
+}
+
+
+.img {
+  width: 75px;
+  height: 75px;
+}
+
+
+/* Modify the background color */
+.navbar-custom {
+    background-color: red;
     color: white;
+    font-size: 2vw;
 }
+
+.blockquote, .blockquote-footer{
+  color: white;
+}
+
+
+.form {
+  margin-top: 25px;
+  font-size: 2vh;
+}
+
+body{
+  font-size: 2vh;
+}
+
+
+
+</style>
