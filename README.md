@@ -8,4 +8,4 @@ Various regions in the world have people who are short on resources. Some of the
 - Say what they need and where they need it
 - Update old entries
 
-
+© 2022 Copyright Nathan Hannah, Umar Haider, Harriet Brooke
