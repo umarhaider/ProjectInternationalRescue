@@ -73,16 +73,10 @@
 </div>
 
 <?php
-/*
   // Server login details
-  $host = 'localhost';
-  $dbname = 'database';
-  $username = 'root';
-  $password = '';
-    
-  $dsn = "mysql:host=$host;dbname=$dbname"; 
+  include 'conn.php';
   // SQL Get all users
-  $sql = "SELECT * FROM employees";
+  $sql = "SELECT * FROM georescue";
    
   // try to connect and send SQL query with details
   // if unable return error 
@@ -96,7 +90,6 @@
   }catch (PDOException $e){
     echo $e->getMessage();
   }
-*/
 ?>
 
 <div id="map"></div>
@@ -117,23 +110,29 @@
           </th>
           <th class="th-sm">Text
           </th>
-          <th class="th-sm">user
+          <th class="th-sm">Person
           </th>
           </th>
           <th class="th-sm">Priority
           </th>
           <th class="th-sm">Status
           </th>
+          <th class="th-sm">Action
+          </th>
         </tr>
       </thead>
       <tbody>
-      
+      <?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
       <tr>
-         <td>1</td>
-         <td>2</td>
-         <td>3</td>
-         <td>4</td>
+         <td><?php echo htmlspecialchars($row['longitude']); ?></td>
+         <td><?php echo htmlspecialchars($row['latitude']); ?></td>
+         <td><?php echo htmlspecialchars($row['text']); ?></td>
+         <td><?php echo htmlspecialchars($row['name']); ?></td>
+         <td><?php echo htmlspecialchars($row['priority']); ?></td>
+         <td><?php echo htmlspecialchars($row['status']); ?></td>
+         <td><button class="btn btn-success btn-block my-4" href="action.php?action=updateStatus&item=<?php echo htmlspecialchars($row['id']); ?>">Complete</button></td>
       </tr>
+      <?php endwhile; ?>
      </tbody>
     </table>
       <div class="text-center"  style="margin-top: 25px;">
