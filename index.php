@@ -130,7 +130,7 @@
          <td><?php echo htmlspecialchars($row['name']); ?></td>
          <td><?php echo htmlspecialchars($row['priority']); ?></td>
          <td><?php echo htmlspecialchars($row['status']); ?></td>
-         <td><button class="btn btn-success btn-block my-4" href="action.php?action=updateStatus&item=<?php echo htmlspecialchars($row['id']); ?>">Complete</button></td>
+         <td><a href="action.php?action=updateStatus&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-success" <?php if($row['status'] == 'Complete'){ echo 'disabled'; } ?> >Complete</button></a><br><br><a href="action.php?action=deleteItem&item=<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-danger">Delete</button></a></td>
       </tr>
       <?php endwhile; ?>
      </tbody>
