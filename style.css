@@ -1,0 +1,67 @@
+<!-- Custom Styles -->
+<style>
+.jumbotron {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.navigationbar
+{
+  font-family: 'Lato', sans-serif;
+  color:grey;
+  font-size: 25px;
+  margin: 0px;
+}
+
+.nav-item:hover{
+  text-decoration: underline;
+}
+
+
+.navbar-brand
+{
+  font-family: 'Lato', sans-serif;
+  color:red;
+  font-size: 30px;
+  margin: 0px;
+}
+
+.jumbotron{
+color: white;
+background-color:#033076; !important;*/
+}
+
+#banner a {
+  text-decoration: none;
+  color: white;
+}
+
+#banner a:hover{
+  text-decoration: none;
+  color: white;
+}
+
+
+.img {
+  width: 100px;
+  height: 100px;
+  padding left: 50px !important;
+}
+
+
+/* Modify the background color */
+.navbar-custom {
+    background-color: #325765;
+    color: white;
+}
+
+.blockquote, .blockquote-footer{
+  color: white;
+}
+
+.nav-link, .nav-link:hover{
+  color: white;
+}
+
+
+</style>
