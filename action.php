@@ -7,7 +7,7 @@ if (isset($_GET['action']))
     {
         if ($_GET['action'] == 'updateStatus')
         {
-            include 'conn.php';
+            include 'conn.php';  // include the connection php file
             $id = $_GET['item'];
 
             include 'conn.php';
@@ -18,17 +18,20 @@ if (isset($_GET['action']))
             // if unable return error
             try
             {
+                // connect to the database
                 $pdo = new PDO($dsn, $username, $password);
                 $stmt = $pdo->query($sql);
                 if ($stmt === false)
                 {
                     $_SESSION['errorMessage'] = "Failed to connect to the database.";
                     header('Location: index.php?code=error');
+                    // error message if unable to connect to the database
                 }
                 else
                 {
                     $_SESSION['successMessage'] = "Successfully updated the status.";
                     header('Location: index.php?code=success');
+                    // message for when the status is successfully updated
                 }
             }
             catch(PDOException $e)
@@ -38,10 +41,10 @@ if (isset($_GET['action']))
         }
         if ($_GET['action'] == 'deleteItem')
         {
-            include 'conn.php';
+            include 'conn.php';  // include the connection php file
             $id = $_GET['item'];
 
-            include 'conn.php';
+            include 'conn.php';  // include the connection php file
             // Update item to complete
             $sql = "DELETE FROM `georescue` WHERE `id`='" . $id . "'";
 
@@ -49,17 +52,20 @@ if (isset($_GET['action']))
             // if unable return error
             try
             {
+                // connect to the database
                 $pdo = new PDO($dsn, $username, $password);
                 $stmt = $pdo->query($sql);
                 if ($stmt === false)
                 {
                     $_SESSION['errorMessage'] = "Failed to connect to the database.";
                     header('Location: index.php?code=error');
+                    // error message if unable to connect to the database
                 }
                 else
                 {
                     $_SESSION['successMessage'] = "Successfully deleted the item.";
                     header('Location: index.php?code=success');
+                    // message for when the item is successfully deleted
                 }
             }
             catch(PDOException $e)
@@ -76,6 +82,7 @@ if (empty($_POST["name"]) || empty($_POST["details"]) || empty($_POST["priority"
 || empty($_POST["lat"]) || empty($_POST["long"])) {
     $_SESSION['errorMessage'] = "Please enter all fields";
     header('index.php');
+    // error message for if the required fields aren't all filled in
 } else {
     $errorMessage = "";
     $name= test_input($_POST["name"]);
