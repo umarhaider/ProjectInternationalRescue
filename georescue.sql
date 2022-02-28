@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2022 at 11:13 AM
+-- Generation Time: Feb 28, 2022 at 12:46 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `georescue` (
   `id` int(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `text` varchar(255) NOT NULL,
+  `details` varchar(255) NOT NULL,
   `longitude` varchar(255) NOT NULL,
   `latitude` varchar(255) NOT NULL,
   `priority` varchar(255) NOT NULL,
@@ -41,8 +41,8 @@ CREATE TABLE `georescue` (
 -- Dumping data for table `georescue`
 --
 
-INSERT INTO `georescue` (`id`, `name`, `text`, `longitude`, `latitude`, `priority`, `status`) VALUES
-(1, 'Umar', 'I need water plz', '54', '-2', 'High', 'Incomplete');
+INSERT INTO `georescue` (`id`, `name`, `details`, `longitude`, `latitude`, `priority`, `status`) VALUES
+(2, 'Umar', 'I need water plz', '-52.82081', '-140.29282', 'Medium', 'Incomplete');
 
 --
 -- Indexes for dumped tables
@@ -62,7 +62,7 @@ ALTER TABLE `georescue`
 -- AUTO_INCREMENT for table `georescue`
 --
 ALTER TABLE `georescue`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
