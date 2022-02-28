@@ -6,6 +6,6 @@ Various regions in the world have people who are short on resources. Some of the
 # Users can:
 
 - Say what they need and where they need it
-- Update/Remove old entries
+- Update old entries
 
 
