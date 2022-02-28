@@ -26,6 +26,17 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" ></script>
 
+
+  <!-- Leafly-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin="">
+  </script>
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -62,6 +73,7 @@
 </div>
 
 <?php
+/*
   // Server login details
   $host = 'localhost';
   $dbname = 'database';
@@ -84,15 +96,16 @@
   }catch (PDOException $e){
     echo $e->getMessage();
   }
+*/
 ?>
+
+<div id="map"></div>
 
 
 <!-- MAIN CONTENT - TABLE -->
 <div class="container">
   <div class="row">
-    <div class="col-sm-2">
-    </div>
-    <div class="col-sm-8">
+    <div class="col">
     <h2 style="text-align: center; margin-top: 20px;">Pinpoints</h2>
     <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
       <thead>
@@ -114,14 +127,13 @@
         </tr>
       </thead>
       <tbody>
-      <?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
+      
       <tr>
-         <td><?php echo htmlspecialchars($row['id']); ?></td>
-         <td><?php echo htmlspecialchars($row['name']); ?></td>
-         <td><?php echo htmlspecialchars($row['email']); ?></td>
-         <td><?php echo htmlspecialchars($row['phone']); ?></td>
+         <td>1</td>
+         <td>2</td>
+         <td>3</td>
+         <td>4</td>
       </tr>
-      <?php endwhile; ?>
      </tbody>
     </table>
       <div class="text-center"  style="margin-top: 25px;">
@@ -130,10 +142,32 @@
       <a href="adduser.html"><button type="button"class="btn btn-secondary">Delete</button></a>
       </div>
     </div>
-    <div class="col-sm-2">
+    <div class="col form" style="margin-top: 25px;">
+        <!-- form login -->
+        <form class="" method="post" action="login-auth.php">
+            <!-- Send Screen Details -->
+            <span class="h4 mb-4 today" title="Today"></span>
+            <p class="h4 mb-4">Enter Pinpoint details </i></p>
+
+            <!-- Location -->
+            <input type="text" name="location" value="" class="form-control mb-4" placeholder="Location" id="location" required >
+
+            <!-- name -->
+            <input type="text" name="name" class="form-control mb-4" placeholder="Name" id="name" required maxlength="40">
+
+            <!-- Description -->
+            <input type="text" name="details" class="form-control mb-4" placeholder="Details" id="name" required>
+
+            <!-- Submit button -->
+            <button class="btn btn-info btn-block my-4" style="background-color: #4723D9;"type="submit">Submit</button>
+
+        </form>
+        <!--form login -->
     </div>
+
   </div>
-</div>
+
+
 
 
 <!-- Enables datatable -->
@@ -145,9 +179,40 @@ $(document).ready(function () {
 </script>
 
 
+<script type="text/javascript">
+var map = L.map('map').setView([51.505, -0.09], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+L.marker([51.5, -0.09]).addTo(map)
+    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+    .openPopup();
+
+
+var popup = L.popup();
+
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+}
+
+function populateForm(e) {
+    var outputValue = e.latlng.toString();
+    document.getElementById("location").value = outputValue;
+}
+
+map.on('click', onMapClick);
+map.on('click', populateForm);
+</script>
+
+
 <!-- FOOTER -->
 <div class="footer-copyright text-center py-3">© 2022 Copyright 
-  <a href="https://nathan-hannah.uk/" target="blank_"> Nathan Hannah</a>
+  <a href="https://github.com/umarhaider/ProjectInternationalRescue" target="blank_"> Nathan Hannah, Umar Haider, Harriet Brooke</a>
 </div>
 
 </body>

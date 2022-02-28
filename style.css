@@ -1,5 +1,8 @@
-<!-- Custom Styles -->
-<style>
+
+#map { 
+  height: 180px; 
+}
+
 .jumbotron {
     padding-top: 15px;
     padding-bottom: 15px;
@@ -51,7 +54,7 @@ background-color:#033076; !important;*/
 
 /* Modify the background color */
 .navbar-custom {
-    background-color: #325765;
+    background-color: red;
     color: white;
 }
 
@@ -61,6 +64,10 @@ background-color:#033076; !important;*/
 
 .nav-link, .nav-link:hover{
   color: white;
+}
+
+.form {
+  margin-top: 25px;
 }
 
 
