@@ -1,6 +1,26 @@
 
 #map { 
-  height: 75vh; 
+  height: 85vh; 
+}
+
+#time {
+  float: right;
+  font-size: 2vh;
+}
+
+
+#dtBasicExample {
+  font-size: 3vh;
+}
+
+.answer1 {
+  display: none;
+}
+
+.question1:hover + .answer1 {
+  display: block;
+  color: red;
+  font-weight: bold;
 }
 
 .low {
@@ -39,6 +59,10 @@
   float: right;
 }
 
+#delbtn {
+  font-size: 5px;
+}
+
 
 .alert-text {
   position: fixed;
@@ -61,12 +85,18 @@ color: white;
 background-color:#033076; !important;*/
 }
 
+.col-4 {
+  font-size: 5px;
+}
+
+
 .col-6 {
    padding: 25px;
 }
 
 .col-8 {
   padding-left: 0px;
+  font-size: 1em;
 }
 
 #banner a {
