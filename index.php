@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="shortcut icon" type="image/png" href="assets/favicon-32x32.png"/>
 
   <!-- Bootstrap -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -41,10 +42,11 @@
 
 <!-- NAVIGATION BAR -->
 <div class="navigationbar">
-<nav id="header" class="navbar navbar-expand-lg navbar navbar-custom">
-  <img src="geoRescue.jpg" class="rounded float-left img" alt="Logo">
+<nav id="header" class="navbar-expand-lg navbar navbar-custom">
+  <img src="assets/geoRescue.jpg" class="rounded float-left img" alt="Logo">
   <p style="margin-left: 5px;"class="mb-0">Geo Rescue</p>
-  <a><button id="resetbtn"class="btn btn-secondary btn-block " onclick="resetMap();">Reset Map</button></a>
+  <div class="ml-auto"><a><button id="resetbtn"class="btn btn-secondary btn-block " onclick="resetMap();">Reset Map View</button></a></div>
+  <div class="ml-auto" id="time"><p><i>Last updated:</i></p></div>
 </nav>
 </div>
 
@@ -80,7 +82,7 @@
   echo "<div id='errortext' class='alert-text alert alert-danger alert-dismissible fade show' role='alert'>";
   echo "<strong>Error! </strong>";
   echo $_SESSION['errorMessage'];
-  //unset($_SESSION['errorMessage']);
+  unset($_SESSION['errorMessage']);
   echo  "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
   echo "<span aria-hidden='true'>&times;</span></div>";
   }
@@ -111,9 +113,8 @@
     </div>
     <div class="col-4 form">
         <!-- form login -->
-        <form class="" method="post" action="form-action.php">
-            <!-- Send Screen Details -->
-            <span class="h4 mb-4 today" title="Today"></span>
+        <form class="form" method="post" action="form-action.php">
+            <input type="checkbox" name="test" value="value1">
             <p class="h4 mb-4">Create new Pinpoint - Select Location on map </i></p>
 
             <!-- Location Latitude-->
@@ -130,20 +131,25 @@
 
             <!-- Priority -->
             <select class="form-control mb-4" name="priority" id="priority">
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="low">Priority Low</option>
+            <option value="medium">Priority Medium</option>
+            <option value="high">Priority High</option>
             </select>
-
+            <div class="question1">
+            <p>What are priority levels?</p>
+            </div>
+             <div class="answer1">
+              Priority Low - No urgency required, this could be general information <br>
+              Priority Medium - Attention required but no immidiate danger<br>
+              Priority high - A severe risk, action should be taken immidiately</div>
             <!-- Submit button -->
             <button class="btn btn-secondary btn-block my-4" type="submit">Submit</button>
-
         </form>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
-      <h2 style="text-align: center; margin-top: 20px;">Pinpoints</h2>
+      <h2 style="text-align: center; margin-top: 20px;">All Pinpoints</h2>
       <table id="dtBasicExample" width="100%" class="table table-hover" cellspacing="0" >
         <thead>
           <tr>
@@ -196,6 +202,17 @@
 
 
 <script type="text/javascript">
+
+  // get a new date (locale machine date time)
+  var date = new Date();
+  // get the date as a string
+  var n = date.toDateString();
+  // get the time as a string
+  var time = date.toLocaleTimeString();
+
+  // find the html element with the id of time
+  // set the innerHTML of that element to the date a space the time
+  document.getElementById('time').innerHTML = 'Map Last updated: ' + n + ' ' + time;
   var x = document.getElementById("location");
   function getLocation() {
     if (navigator.geolocation) {
@@ -246,6 +263,14 @@ var map = L.map('map').setView([51.505, -0.01], 5);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
+
+//need license to use
+googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+});
+
+//googleStreets.addTo(map);
 L.control.locate().addTo(map);
 
 
@@ -253,11 +278,14 @@ L.control.locate().addTo(map);
 
 <?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
   <script type="text/javascript">
+
   var lat = "<?php echo htmlspecialchars($row['latitude']); ?>";
   var long = "<?php echo htmlspecialchars($row['longitude']); ?>";
   var text = "<?php echo htmlspecialchars($row['details']); ?>";
+  var user = "<?php echo htmlspecialchars($row['name']); ?>";
+  var priority = "<?php echo htmlspecialchars($row['priority']); ?>";
     L.marker([lat, long]).addTo(map)
-      .bindPopup(text)
+      .bindPopup(text + '<br> user-' + user + '<br>Priority-' + priority)
       .openPopup();
   var popup = L.popup();
   </script>
@@ -268,6 +296,7 @@ L.control.locate().addTo(map);
 
 function showMarker(lat, long) {
   map.setView([lat, long], 16);
+  window.scrollTo(0, 0);
 }
 
 
@@ -291,8 +320,8 @@ map.on('click', populateForm);
 
 
 <!-- FOOTER -->
-<div class="footer-copyright text-center py-3">© 2022 Copyright 
-  <a href="https://github.com/umarhaider/ProjectInternationalRescue" target="blank_"> Nathan Hannah, Umar Haider, Harriet Brooke</a>
+<div class="footer-copyright text-center py-3">© 2022 Copyright Project GeoRescue -
+  <a href="https://github.com/nathanhannah122/Project-GeoRescue" target="blank_"> Nathan Hannah, Umar Haider, Harriet Brooke</a>
 </div>
 
 </body>

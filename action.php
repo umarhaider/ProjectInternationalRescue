@@ -58,7 +58,7 @@ if (isset($_GET['action']))
                 }
                 else
                 {
-                    $_SESSION['successMessage'] = "Successfully deleted the item.";
+                    $_SESSION['successMessage'] = "Deleted the Pinpoint.";
                     header('Location: index.php');
                 }
             }
