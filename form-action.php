@@ -11,14 +11,15 @@ if (empty($_POST["name"]) || empty($_POST["details"]) || empty($_POST["priority"
 || empty($_POST["lat"]) || empty($_POST["long"])) {
       $_SESSION['errorMessage'] = "Please enter all fields";
       header('location: index.php');
-   } 
+      exit();
+} 
 
    // post data from signup form
-$name     = checkData($_POST["name"]);
-$details  = checkData($_POST["details"]);
-$priority = checkData($_POST["priority"]);
-$lat      = checkData($_POST["lat"]);
-$long     = checkData($_POST["long"]);
+   $name     = checkData($_POST["name"]);
+   $details  = checkData($_POST["details"]);
+   $priority = checkData($_POST["priority"]);
+   $lat      = checkData($_POST["lat"]);
+   $long     = checkData($_POST["long"]);
 
 
    // calls function to input to DB  
@@ -37,6 +38,8 @@ $long     = checkData($_POST["long"]);
    // when successful redirects user to success message
    function processData($name, $details, $priority, $lat, $long) {
       include 'conn.php';
+
+      //if $priority == '1'
       try{
          $sql = "INSERT INTO georescue (name, details, priority, latitude, longitude, status) VALUES (:name, :details, :priority, :lat, :long, :status)";
          // Prepare statement.
@@ -52,6 +55,7 @@ $long     = checkData($_POST["long"]);
          $statement->bindValue(':status', 'incomplete');
          // Execute the statement and insertvalues.
          $inserted = $statement->execute();
+         $_SESSION['successMessage'] = 'New Pinpoint Added!';
          header('location: index.php');
       // Catch errors
       } catch (PDOException $e) {

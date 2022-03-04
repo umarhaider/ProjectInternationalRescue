@@ -1,6 +1,46 @@
 
 #map { 
-  height: 280px; 
+  height: 85vh; 
+}
+
+#time {
+  float: right;
+  font-size: 2vh;
+}
+
+
+#dtBasicExample {
+  font-size: 3vh;
+}
+
+.answer1 {
+  display: none;
+}
+
+.question1:hover + .answer1 {
+  display: block;
+  color: red;
+  font-weight: bold;
+}
+
+.low {
+  color: darkkhaki;
+  font-weight: bold;
+}
+
+.medium {
+  color: orange;
+  font-weight: bold;
+}
+
+
+.high {
+  color: red;
+  font-weight: bold;
+}
+
+.textarea {
+  max-height: 15vh;
 }
 
 .jumbotron {
@@ -12,14 +52,25 @@
 {
   font-family: 'Lato', sans-serif;
   color:grey;
-  font-size: 25px;
   margin: 0px;
 }
 
-.nav-item:hover{
-  text-decoration: underline;
+#resetbtn {
+  float: right;
 }
 
+#delbtn {
+  font-size: 5px;
+}
+
+
+.alert-text {
+  position: fixed;
+  top: 1vh;
+  margin-left: 80%;
+  width: 20%;
+  transition: height .2s;
+}
 
 .navbar-brand
 {
@@ -34,6 +85,20 @@ color: white;
 background-color:#033076; !important;*/
 }
 
+.col-4 {
+  font-size: 5px;
+}
+
+
+.col-6 {
+   padding: 25px;
+}
+
+.col-8 {
+  padding-left: 0px;
+  font-size: 1em;
+}
+
 #banner a {
   text-decoration: none;
   color: white;
@@ -46,9 +111,8 @@ background-color:#033076; !important;*/
 
 
 .img {
-  width: 100px;
-  height: 100px;
-  padding left: 50px !important;
+  width: 75px;
+  height: 75px;
 }
 
 
@@ -56,19 +120,23 @@ background-color:#033076; !important;*/
 .navbar-custom {
     background-color: red;
     color: white;
+    font-size: 2vw;
 }
 
 .blockquote, .blockquote-footer{
   color: white;
 }
 
-.nav-link, .nav-link:hover{
-  color: white;
-}
 
 .form {
   margin-top: 25px;
+  font-size: 2vh;
 }
+
+body{
+  font-size: 2vh;
+}
+
 
 
 </style>
