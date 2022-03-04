@@ -292,17 +292,26 @@ L.control.locate().addTo(map);
 
   var LeafIcon = L.Icon.extend({
       options: {
-         iconSize:     [38, 95],
-         shadowSize:   [50, 64],
+         iconSize:     [35, 35],
          iconAnchor:   [22, 94],
-         shadowAnchor: [4, 62],
          popupAnchor:  [-3, -76]
       }
   });
 
   var greenIcon = new LeafIcon({
-      iconUrl: '123',
-      shadowUrl: '123'
+      iconUrl: 'assets/greenIcon.png'
+  })
+
+  var orangeIcon = new LeafIcon({
+      iconUrl: 'assets/orangeIcon.png'
+  })
+
+  var yellowIcon = new LeafIcon({
+      iconUrl: 'assets/yellowIcon.png'
+  })
+
+  var redIcon = new LeafIcon({
+      iconUrl: 'assets/redIcon.png'
   })
 
   var lat = "<?php echo htmlspecialchars($row['latitude']); ?>";
@@ -310,7 +319,15 @@ L.control.locate().addTo(map);
   var text = "<?php echo htmlspecialchars($row['details']); ?>";
   var user = "<?php echo htmlspecialchars($row['name']); ?>";
   var priority = "<?php echo htmlspecialchars($row['priority']); ?>";
-    L.marker([lat, long], {icon: greenIcon}).addTo(map)
+    L.marker([lat, long], {icon: 
+      <?php if ($row['priority'] == 'low') {
+              echo 'yellowIcon'; 
+            } else if ($row['priority'] == 'medium') {
+              echo 'orangeIcon'; 
+            } else {
+              echo 'redIcon'; 
+            } 
+            ?> }).addTo(map)
       .bindPopup(text + '<br> user-' + user + '<br>Priority-' + priority)
       .openPopup();
   var popup = L.popup();
