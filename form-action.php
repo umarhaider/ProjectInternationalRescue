@@ -43,7 +43,7 @@ if (empty($_POST["name"]) || empty($_POST["details"]) || empty($_POST["priority"
       try{
          $sql = "INSERT INTO georescue (name, details, priority, latitude, longitude, status) VALUES (:name, :details, :priority, :lat, :long, :status)";
          // Prepare statement.
-         $pdo = new PDO($dsn, $username, $passwordDb);
+         $pdo = new PDO($dsn, $username, $password);
          $statement = $pdo->prepare($sql);
 
          // Bind values to the parameter.

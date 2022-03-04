@@ -10,7 +10,7 @@
 
 
 #dtBasicExample {
-  font-size: 3vh;
+  font-size: 2vh;
 }
 
 .answer1 {
@@ -31,6 +31,19 @@
 .medium {
   color: orange;
   font-weight: bold;
+}
+
+#successtext {
+  z-index: 1000;
+}
+
+#errortext {
+  z-index: 1000;
+}
+
+
+.output{
+  font-size: 2vh;
 }
 
 
@@ -135,6 +148,7 @@ background-color:#033076; !important;*/
 
 body{
   font-size: 2vh;
+  max-width: 100%;
 }
 
 
