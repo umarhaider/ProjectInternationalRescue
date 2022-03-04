@@ -20,7 +20,7 @@
   
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" ></script>
 
@@ -104,6 +104,16 @@
 
 ?>
 
+<script type="text/javascript">
+  function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("At " + e.latlng.toString())
+        .openOn(map);
+}
+
+</script>
+
 <!-- MAIN CONTENT - TABLE -->
 <div class="container-fluid" width="100%">
   <div class="row">
@@ -114,7 +124,6 @@
     <div class="col-4 form">
         <!-- form login -->
         <form class="form" method="post" action="form-action.php">
-            <input type="checkbox" name="test" value="value1">
             <p class="h4 mb-4">Create new Pinpoint - Select Location on map </i></p>
 
             <!-- Location Latitude-->
@@ -173,11 +182,11 @@
         <tbody>
         <?php while($row = $stmt2->fetch(PDO::FETCH_ASSOC)) : ?>
         <tr>
-           <td><?php echo htmlspecialchars($row['longitude']); ?></td>
-           <td><?php echo htmlspecialchars($row['latitude']); ?></td>
-           <td><?php echo htmlspecialchars($row['details']); ?></td>
-           <td><?php echo htmlspecialchars($row['name']); ?></td>
-           <td> <?php if ($row['priority'] == 'low') {
+           <td class="output"><?php echo htmlspecialchars($row['longitude']); ?></td>
+           <td class="output"><?php echo htmlspecialchars($row['latitude']); ?></td>
+           <td class="output"><?php echo htmlspecialchars($row['details']); ?></td>
+           <td class="output"><?php echo htmlspecialchars($row['name']); ?></td>
+           <td class="output"> <?php if ($row['priority'] == 'low') {
               echo '<span class="low">' . htmlspecialchars($row['priority']) . '<span>'; 
             } else if ($row['priority'] == 'medium') {
               echo '<span class="medium">' . htmlspecialchars($row['priority']) . '<span>'; 
@@ -249,16 +258,16 @@ $(document).ready(function() {
     $('.dataTables_length').addClass('bs-select');
 } );
 
-
-function resetMap() {
-  map.setView([51.505, -0.01], 5);
-}
-
 </script>
 
 
 <script type="text/javascript">
 var map = L.map('map').setView([51.505, -0.01], 5);
+
+function resetMap() {
+  map.setView([51.505, -0.01], 5);
+}
+
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -299,13 +308,6 @@ function showMarker(lat, long) {
   window.scrollTo(0, 0);
 }
 
-
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("At " + e.latlng.toString())
-        .openOn(map);
-}
 
 function populateForm(e) {
     var outputValueLat = e.latlng.lat;
