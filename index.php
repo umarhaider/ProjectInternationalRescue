@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
 </head>
-<body>
+<body onload="resetMap()">
 
 <!-- NAVIGATION BAR -->
 <div class="navigationbar">
@@ -264,12 +264,14 @@ $(document).ready(function() {
 <script type="text/javascript">
 var map = L.map('map').setView([51.505, -0.01], 5);
 
+
 function resetMap() {
   map.setView([51.505, -0.01], 5);
 }
 
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 15,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
@@ -288,12 +290,27 @@ L.control.locate().addTo(map);
 <?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
   <script type="text/javascript">
 
+  var LeafIcon = L.Icon.extend({
+      options: {
+         iconSize:     [38, 95],
+         shadowSize:   [50, 64],
+         iconAnchor:   [22, 94],
+         shadowAnchor: [4, 62],
+         popupAnchor:  [-3, -76]
+      }
+  });
+
+  var greenIcon = new LeafIcon({
+      iconUrl: '123',
+      shadowUrl: '123'
+  })
+
   var lat = "<?php echo htmlspecialchars($row['latitude']); ?>";
   var long = "<?php echo htmlspecialchars($row['longitude']); ?>";
   var text = "<?php echo htmlspecialchars($row['details']); ?>";
   var user = "<?php echo htmlspecialchars($row['name']); ?>";
   var priority = "<?php echo htmlspecialchars($row['priority']); ?>";
-    L.marker([lat, long]).addTo(map)
+    L.marker([lat, long], {icon: greenIcon}).addTo(map)
       .bindPopup(text + '<br> user-' + user + '<br>Priority-' + priority)
       .openPopup();
   var popup = L.popup();
